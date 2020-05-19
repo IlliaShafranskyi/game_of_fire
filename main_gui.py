@@ -1,5 +1,6 @@
 from tkinter import *
 import time
+from handler import validate_phrase
 
 #INIT AND CONFIG MAIN WINDOW
 root = Tk()
@@ -23,9 +24,12 @@ answer_frame = Frame(root, width = WIDTH_SCREEN - 80, height = HEIGHT_SCREEN // 
         highlightbackground="gold", highlightthickness=6)
 
 answer_box = Listbox(root, bg="black", fg="gold", 
-        borderwidth=0, highlightthickness=0, selectbackground="gold", width=105)
+        borderwidth=0, highlightthickness=0, selectbackground="gold", highlightcolor="green", width=100)
 
 health_label = Label(text="Здоровье:", bg="black", fg="gold")
+
+health_player = 100
+health_label = Label(text="Здоровье: {}".format(health_player), bg="black", fg="gold")
 #
 
 #START AND CONFIGURATION ALL WIDGETS
@@ -55,6 +59,13 @@ def config_answer_box():
     answer_box.config(font=("Podkova ExtraBold", 13))
     answer_box.pack(anchor=NW)
     answer_box.place(x=70, y=410)
+    a = "А ты зачем спрашиваешь, старик?"
+    b = "Ищу семью, может вы знаете?"
+    c = "Проваливай, рухлядь чердачная"
+    for i in (a, b, c):
+        answer_box.insert(END, i)
+    
+    answer_box.bind('<Return>', answer_box_clicked)
 
 def config_health_label():
     health_label.pack(expand=1, anchor=SW)
@@ -63,11 +74,30 @@ def config_health_label():
 
 
 
-#other functions
-def get_choice():
-    result = 
+#handler
+def answer_box_clicked(event):
+   answer_box_get_result()
+   clear_all_boxes()
+   set_new_phrases()
+def clear_all_boxes():
+   dialog_box['text'] = ""
+   answer_box.delete(0, END)
+
+def answer_box_get_result():
+    index_result = answer_box.curselection()
+    global answer_player
+    answer_player = answer_box.get(index_result)
+
+def set_new_phrases():
+    new_phrases_list = validate_phrase(answer_player)
+    main_phrase = new_phrases_list[0]
+    dialog_box['text'] = main_phrase
+    new_player_phrases = new_phrases_list[1]
+    for i in new_player_phrases:
+        answer_box.insert(END, i)
 
 
+#START PROGRAM
 def main():
     config_main_name()
     config_dialog_frame()
@@ -78,7 +108,4 @@ def main():
     answer_box.focus()
     root.mainloop()
 
-
-
-if(__name__ == "__main__"):
-    main()
+main()
