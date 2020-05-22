@@ -29,7 +29,7 @@ def menu_clicked(event):
     result = main_menu.get(index_result)
     if(result == "НАЧАТЬ ИГРУ"):
         root.destroy()
-        import main_gui
+        import create_hero 
     elif(result == "ВЫХОД"):
         root.destroy()
 
